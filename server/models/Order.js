@@ -76,7 +76,7 @@ const schema = new mongoose.Schema({
   paymentInfo: {
     type: mongoose.Schema.ObjectId,
     ref: "Payment",
-    required: true,
+    // required: true,
   },
 
   paidAt: Date,

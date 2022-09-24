@@ -1,7 +1,12 @@
 import express from "express";
 import passport from "passport";
-import { logout, myProfile } from "../controllers/userControllers.js";
-import { isAuthenticated } from "../middlewares/auth.js";
+import {
+  getAdminStats,
+  getAdminUsers,
+  logout,
+  myProfile,
+} from "../controllers/userControllers.js";
+import { authorizedAdmin, isAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -12,8 +17,8 @@ router.get(
   })
 );
 
-router.get("/login", passport.authenticate("google"), (req, res, next) => {
-  res.send("Logged In");
+router.get("/login", passport.authenticate("google"), {
+  successRedirect: process.env.FRONTEND_URL,
 });
 // router.get(
 //   "/login",
@@ -26,5 +31,10 @@ router.get("/login", passport.authenticate("google"), (req, res, next) => {
 router.get("/me", isAuthenticated, myProfile);
 
 router.get("/logout", logout);
+
+// admin routes
+router.get("/admin/users", isAuthenticated, authorizedAdmin, getAdminUsers);
+
+router.get("/admin/stats", isAuthenticated, authorizedAdmin, getAdminStats);
 
 export default router;
